@@ -188,7 +188,7 @@ async fn render_form<E: ActixAdminViewModelTrait>(
         .into_iter()
         .map(|err| {
             #[cfg(enable_tracing)]
-            tracing::error!("{e}");
+            tracing::error!("{err}");
             ActixAdminNotification::from(err)
         })
         .collect();
@@ -198,7 +198,7 @@ async fn render_form<E: ActixAdminViewModelTrait>(
         .render("create_or_edit.html", &ctx)
         .map_err(|err| {
             #[cfg(enable_tracing)]
-            tracing::error!("{e}");
+            tracing::error!("{err}");
             error::ErrorInternalServerError(err)
         })?;
     Ok(HttpResponse::Ok().content_type("text/html").body(body))
