@@ -125,6 +125,8 @@ pub async fn create_or_edit_post<E: ActixAdminViewModelTrait>(
                 .finish())
             }
             Err(e) => {
+                #[cfg(enable_tracing)]
+                tracing::error!("{e}");
                 errors.push(e);
                 render_form::<E>(
                     req,
@@ -184,13 +186,21 @@ async fn render_form<E: ActixAdminViewModelTrait>(
 
     let notifications: Vec<ActixAdminNotification> = errors
         .into_iter()
-        .map(|err| ActixAdminNotification::from(err))
+        .map(|err| {
+            #[cfg(enable_tracing)]
+            tracing::error!("{e}");
+            ActixAdminNotification::from(err)
+        })
         .collect();
 
     ctx.insert("notifications", &notifications);
     let body = actix_admin.tera
         .render("create_or_edit.html", &ctx)
-        .map_err(|err| error::ErrorInternalServerError(err))?;
+        .map_err(|err| {
+            #[cfg(enable_tracing)]
+            tracing::error!("{e}");
+            error::ErrorInternalServerError(err)
+        })?;
     Ok(HttpResponse::Ok().content_type("text/html").body(body))
 }
 
