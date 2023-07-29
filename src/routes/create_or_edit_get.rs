@@ -59,6 +59,8 @@ async fn create_or_edit_get<E: ActixAdminViewModelTrait>(session: &Session, req:
             model = res;
         },
         Err(e) => {
+            #[cfg(enable-tracing)]
+            tracing::error!("{e}");
             errors.push(e);
             model = ActixAdminModel::create_empty();
         }
@@ -97,6 +99,10 @@ async fn create_or_edit_get<E: ActixAdminViewModelTrait>(session: &Session, req:
     
     let body = actix_admin.tera
         .render("create_or_edit.html", &ctx)
-        .map_err(|err| error::ErrorInternalServerError(err))?;
+        .map_err(|err| {
+            #[cfg(enable-tracing)]
+            tracing::error!("{err}");
+            error::ErrorInternalServerError(err)
+        })?;
     Ok(http_response_code.content_type("text/html").body(body))
 }
