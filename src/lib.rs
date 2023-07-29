@@ -116,7 +116,7 @@ pub enum ActixAdminError {
 
 impl error::ResponseError for ActixAdminError {
     fn error_response(&self) -> HttpResponse {
-        #[cfg(enable-tracing)]
+        #[cfg(feature="enable-tracing")]
         tracing::debug!("{self}");
         HttpResponse::build(self.status_code())
             .insert_header(ContentType::html())
