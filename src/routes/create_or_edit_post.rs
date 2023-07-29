@@ -175,6 +175,7 @@ async fn render_form<E: ActixAdminViewModelTrait>(
     ctx.insert("sort_order", &sort_order);
     ctx.insert("page", &page);
 
+    ctx.insert("navbar_title", &actix_admin.configuration.navbar_title);
     ctx.insert("entity_names", &actix_admin.entity_names);
     ctx.insert(
         "view_model",
