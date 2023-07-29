@@ -30,8 +30,8 @@ pub async fn index(session: Session, data: web::Data<ActixAdmin>) -> Result<Http
     let body = actix_admin.tera
         .render("index.html", &ctx)
         .map_err(|e| {
-            #[cfg(enable_tracing)]
-            tracing::warn!("{}", e);
+            #[cfg(enable-tracing)]
+            tracing::error!("{}", e);
             error::ErrorInternalServerError("Template error")
         })?;
     Ok(HttpResponse::Ok().content_type("text/html").body(body))
@@ -41,8 +41,8 @@ pub async fn not_found(data: web::Data<ActixAdmin>) -> Result<HttpResponse, Erro
     let body = data.get_ref().tera
         .render("not_found.html", &Context::new())
         .map_err(|e| {
-            #[cfg(enable_tracing)]
-            tracing::warn!("{}", e);
+            #[cfg(enable-tracing)]
+            tracing::error!("{}", e);
             error::ErrorInternalServerError("Template error")
         })?;
     Ok(HttpResponse::NotFound().content_type("text/html").body(body))
