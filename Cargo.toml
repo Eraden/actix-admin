@@ -19,7 +19,7 @@ name = "actix_admin"
 path = "src/lib.rs"
 
 [features]
-default = []
+default = ['enable-tracing']
 enable-tracing = ['tracing']
 
 [dependencies]

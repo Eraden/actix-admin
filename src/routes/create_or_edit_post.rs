@@ -86,6 +86,11 @@ pub async fn create_or_edit_post<E: ActixAdminViewModelTrait>(
 
     if model.has_errors() {
         errors.push(ActixAdminError::ValidationErrors);
+        #[cfg(feature="enable-tracing")]
+        {
+            tracing::error!("OP errors: {errors:#?}");
+            tracing::debug!("Model errors: {:#?}", model.errors);
+        }
         render_form::<E>(
             req,
             actix_admin,

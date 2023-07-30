@@ -13,7 +13,7 @@ use actix_web::{
 use async_trait::async_trait;
 use derive_more::{Display, Error};
 use sea_orm::DatabaseConnection;
-use serde_derive::{Serialize};
+use serde_derive::Serialize;
 use tera::Tera;
 use std::collections::HashMap;
 
@@ -117,7 +117,7 @@ pub enum ActixAdminError {
 impl error::ResponseError for ActixAdminError {
     fn error_response(&self) -> HttpResponse {
         #[cfg(feature="enable-tracing")]
-        tracing::debug!("{self}");
+        tracing::debug!("{self:#?}");
         HttpResponse::build(self.status_code())
             .insert_header(ContentType::html())
             .body(self.to_string())
