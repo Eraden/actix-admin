@@ -82,6 +82,10 @@ pub async fn create_or_edit_post<E: ActixAdminViewModelTrait>(
     let db = db.get_ref();
 
     let mut model = model_res.unwrap();
+    #[cfg(feature="enable-tracing")]
+    {
+        tracing::debug!("Entity model: {:#?}", model);
+    }
     E::validate_entity(&mut model);
 
     if model.has_errors() {
